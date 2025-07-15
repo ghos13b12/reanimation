@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Monitoring Hospitalisation</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .box {
+      border: 4px solid #f58220;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #000;
+      padding: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .box .nom {
+      color: #f58220;
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    .box .date {
+      font-size: 1em;
+      margin-top: 10px;
+    }
+
+    .box.green { border-color: #4CAF50; }
+    .box.orange { border-color: #FF9800; }
+    .box.red { border-color: #F44336; }
+  </style>
+</head>
+<body>
+  <h1>📋 Liste des patients hospitalisés</h1>
+  <div class="grid" id="boxes">Chargement...</div>
+
+  <script>
+    const sheetId = "1qP34VnnoJgxTX3rdont0mlpvpzApgmobklKx5soJvio";
+    const gid = "0";
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+
+    function getColorClass(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('/');
+      if (parts.length !== 3) return '';
+
+      const hospitalDate = new Date(parts[2], parts[1] - 1, parts[0]); // jj/mm/aaaa
+      const today = new Date();
+      const diffTime = today - hospitalDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays <= 1) return "green";
+      else if (diffDays <= 3) return "orange";
+      else return "red";
+    }
+
+    function fetchData() {
+      fetch(url)
+        .then(res => res.text())
+        .then(data => {
+          const json = JSON.parse(data.substring(47).slice(0, -2));
+          const rows = json.table.rows;
+
+          let html = "";
+          for (let i = 0; i < Math.min(rows.length, 15); i++) {
+            const row = rows[i].c;
+            const box = row[0]?.v || "";
+            const nom = row[1]?.v || "";
+            const date = row[2]?.v || "";
+            const colorClass = getColorClass(date);
+
+            html += `
+              <div class="box ${colorClass}">
+                <div style="font-size: 1.6em;">${box}</div>
+                <div class="nom">${nom}</div>
+                <div class="date">${date}</div>
+              </div>
+            `;
+          }
+
+          document.getElementById("boxes").innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById("boxes").innerHTML = "<p>❌ Erreur de chargement.</p>";
+          console.error(err);
+        });
+    }
+
+    fetchData();
+    setInterval(fetchData, 30000); // Actualiser toutes les 30 secondes
+  </script>
+</body>
+</html>
