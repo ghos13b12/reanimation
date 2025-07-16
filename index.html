@@ -7,7 +7,7 @@
     body {
       background-color: #111;
       color: #fff;
-      font-family: sans-serif;
+      font-family: Open Sans Bold;
       margin: 0;
       padding: 20px;
     }
@@ -35,12 +35,12 @@
 
     .box .nom {
       color: #f58220;
-      font-size: 1.2em;
+      font-size: 1.5em;
       margin: 10px 0;
     }
 
     .box .date {
-      font-size: 1em;
+      font-size: 1.4em;
       margin-top: 10px;
     }
 
@@ -50,7 +50,7 @@
   </style>
 </head>
 <body>
-  <h1>📋 Liste des patients hospitalisés</h1>
+  <h1> Liste des patients hospitalisés</h1>
   <div class="grid" id="boxes">Chargement...</div>
 
   <script>
@@ -68,7 +68,7 @@
       const diffTime = today - hospitalDate;
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-      if (diffDays <= 1) return "green";
+      if (diffDays = 1) return "green";
       else if (diffDays <= 3) return "orange";
       else return "red";
     }
@@ -81,7 +81,7 @@
           const rows = json.table.rows;
 
           let html = "";
-          for (let i = 0; i < Math.min(rows.length, 15); i++) {
+          for (let i = 0; i < Math.min(rows.length, 20); i++) {
             const row = rows[i].c;
             const box = row[0]?.v || "";
             const nom = row[1]?.v || "";
@@ -106,7 +106,7 @@
     }
 
     fetchData();
-    setInterval(fetchData, 30000); // Actualiser toutes les 30 secondes
+    setInterval(fetchData, 30000); // Actualiser toutes les 10 secondes
   </script>
 </body>
 </html>
