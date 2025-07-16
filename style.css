@@ -1,0 +1,77 @@
+/* --- Import de la police (alternative au <link> dans le HTML) --- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+
+/* --- Définition des variables de couleur à la racine du document --- */
+:root {
+  --background-color: #1a1a1a;
+  --text-color: #f0f0f0;
+  --card-background: #ffffff;
+  --card-text: #1a1a1a;
+  
+  --color-default: #315478; /* par défaut */
+  --color-ok: #4CAF50;      /* Vert */
+  --color-warning: #FF9800; /* Orange */
+  --color-danger: #F44336;  /* Rouge */
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 2rem; /* Utilisation de 'rem' pour la flexibilité */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-default);
+}
+
+.grid {
+  display: grid;
+  /* La grille s'adapte automatiquement au nombre d'éléments */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.box {
+  background-color: var(--card-background);
+  color: var(--card-text);
+  border: 5px solid var(--color-default);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  font-weight: 700; /* Correspond au 'Bold' de Open Sans */
+  
+  /* Ajout d'une ombre et d'une transition pour un effet plus pro */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* On utilise les variables pour les couleurs de bordure */
+.box.status-ok { border-color: var(--color-ok); }
+.box.status-warning { border-color: var(--color-warning); }
+.box.status-danger { border-color: var(--color-danger); }
+
+/* Classes spécifiques pour chaque élément de la carte */
+.box-id {
+  font-size: 1.6em;
+  margin-bottom: 0.5rem;
+}
+
+.box-name {
+  color: var(--color-default);
+  font-size: 2em;
+  margin: 0.5rem 0;
+}
+
+.box-date {
+  font-size: 1.5em;
+  margin-top: 0.5rem;
+}
